@@ -9,6 +9,7 @@
     #   ./fcitx5
     #   ./i3
     ./programs
+    ./git.nix
     #   ./rofi
     #   ./shell
   ];
