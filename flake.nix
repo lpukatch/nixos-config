@@ -65,7 +65,7 @@
         specialArgs = {inherit inputs outputs nix-colors;};
         modules = [
           # > Our main nixos configuration file <
-          ./nixos/configuration.nix
+          ./hosts/laptop
           ./modules/nixos/fonts.nix
           {
             environment.systemPackages = [alejandra.defaultPackage.x86_64-linux];
