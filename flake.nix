@@ -61,6 +61,23 @@
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = {
+      desktop = nixpkgs.lib.nixosSystem {
+        specialArgs = {inherit inputs outputs nix-colors;};
+        modules = [
+          # > Our main nixos configuration file <
+          ./hosts/desktop
+          ./modules/nixos/fonts.nix
+          {
+            environment.systemPackages = [alejandra.defaultPackage.x86_64-linux];
+          }
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.luke = import ./home-manager;
+          }
+        ];
+      };
       laptop = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs nix-colors;};
         modules = [
