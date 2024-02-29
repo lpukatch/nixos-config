@@ -14,6 +14,7 @@
     pavucontrol
     playerctl
     pulsemixer
+    streamlink-twitch-gui-bin
     # images
     imv
   ];
