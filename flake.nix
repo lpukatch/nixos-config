@@ -67,6 +67,7 @@
           # > Our main nixos configuration file <
           ./hosts/desktop
           ./modules/nixos/fonts.nix
+          ./pkgs/steam.nix
           {
             environment.systemPackages = [alejandra.defaultPackage.x86_64-linux];
           }
