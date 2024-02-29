@@ -130,6 +130,7 @@
     packages = with pkgs; [
       firefox
       #  thunderbird
+      pkgs.gnome3.gnome-tweaks
     ];
   };
 
