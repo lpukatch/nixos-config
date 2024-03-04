@@ -1,25 +1,29 @@
 {
   description = "NixOS configuration";
+
   inputs = {
     nixpkgs = {
       url = "github:nixos/nixpkgs/nixos-23.11";
     };
+
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-23.05";
 
     home-manager = {
       url = github:nix-community/home-manager/release-23.11;
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    hyprland-contrib = {
-      url = "github:hyprwm/contrib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    impermanence.url = "github:nix-community/impermanence";
 
-    spicetify-nix = {
-      url = github:the-argus/spicetify-nix;
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nix-std.url = "github:chessai/nix-std";
 
+    flake-programs-sqlite.url = "github:wamserma/flake-programs-sqlite";
+    flake-programs-sqlite.inputs.nixpkgs.follows = "nixpkgs";
+
+    stylix.url = "github:danth/stylix";
+
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
     nix-colors = {
       url = github:misterio77/nix-colors;
     };
@@ -47,9 +51,6 @@
       url = "github:kamadorueda/alejandra/3.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # vscode-server.url = github:nix-community/nixos-vscode-server;
-    # nixos-vscode-server.url = "github:nix-community/nixos-vscode-server";
-    # nixos-vscode-server.flake = false;
   };
 
   outputs = {
@@ -59,78 +60,57 @@
     nix-colors,
     alejandra,
     ...
-  } @ inputs: let
-    inherit (self) outputs;
+  } @ attrs: let
+    sharedConfig = hostname: nsystem:
+      nixpkgs.lib.nixosSystem {
+        system = nsystem;
+        specialArgs = attrs;
 
-    system = "x86_64-linux";
-    user = "luke";
+        modules = [
+          ./modules/nixos/common.nix
+          ./hosts/${hostname}
+
+          # ./base
+          # ./${hostname}.nix
+          # ./hardware/${hostname}.nix
+
+          {networking.hostName = hostname;}
+
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.luke = import ./home-manager;
+          }
+          # impermanence.nixosModule
+          # { home-manager.users.luke.imports = [ impermanence.nixosModules.home-manager.impermanence ]; }
+
+          # flake-programs-sqlite.nixosModules.programs-sqlite
+          #stylix.nixosModules.stylix
+          # chaotic.nixosModules.default
+
+          # { nixpkgs.overlays = [
+          #   (final: prev: {
+          #     unstable = import nixpkgs-unstable {
+          #       system = nsystem;
+          #       config.allowUnfree = true;
+          #     };
+          #   })
+
+          #   (final: prev: {
+          #     stable = import nixpkgs-stable {
+          #       system = nsystem;
+          #       config.allowUnfree = true;
+          #     };
+          #   })
+          # ];}
+        ];
+      };
   in {
-    nixosConfigurations = import ./outputs/nixos.nix {inherit inputs system user nix-colors alejandra home-manager;};
-    formatter = system: nixpkgs.legacyPackages.${system}.alejandra;
+    nixosConfigurations = {
+      laptop = sharedConfig "laptop" "x86_64-linux";
+      desktop = sharedConfig "desktop" "x86_64-linux";
+      formatter = system: nixpkgs.legacyPackages.${system}.alejandra;
+    };
   };
-  #     inherit (self) outputs;
-  #     # Supported systems for your flake packages, shell, etc.
-  #     systems = [
-  #       "x86_64-linux"
-  #     ];
-  #     # This is a function that generates an attribute by calling a function you
-  #     # pass to it, with each system as an argument
-  #     forAllSystems = nixpkgs.lib.genAttrs systems;
-  #   in {
-  #     # Your custom packages
-  #     # Accessible through 'nix build', 'nix shell', etc
-  #     packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
-
-  #     # Formatter for your nix files, available through 'nix fmt'
-  #     # Other options beside 'alejandra' include 'nixpkgs-fmt'
-
-  #     # Your custom packages and modifications, exported as overlays
-  #     overlays = import ./overlays {inherit inputs;};
-  #     # Reusable nixos modules you might want to export
-  #     # These are usually stuff you would upstream into nixpkgs
-  #     nixosModules = import ./modules/nixos;
-  #     # Reusable home-manager modules you might want to export
-  #     # These are usually stuff you would upstream into home-manager
-  #     homeManagerModules = import ./modules/home-manager;
-
-  #     # NixOS configuration entrypoint
-  #     # Available through 'nixos-rebuild --flake .#your-hostname'
-  # nixosConfigurations = {
-  #       desktop = nixpkgs.lib.nixosSystem {
-  #         specialArgs = {inherit inputs outputs nix-colors;};
-  #         modules = [
-  #           # > Our main nixos configuration file <
-  #           ./hosts/desktop
-  #           ./modules/nixos/fonts.nix
-  #           ./pkgs/steam.nix
-  #           {
-  #             environment.systemPackages = [alejandra.defaultPackage.x86_64-linux];
-  #           }
-  #           home-manager.nixosModules.home-manager
-  #           {
-  #             home-manager.useGlobalPkgs = true;
-  #             home-manager.useUserPackages = true;
-  #             home-manager.users.luke = import ./home-manager;
-  #           }
-  #         ];
-  #       };
-  #     laptop = nixpkgs.lib.nixosSystem {
-  #       specialArgs = {inherit inputs outputs nix-colors;};
-  #       modules = [
-  #         # > Our main nixos configuration file <
-  #         ./hosts/laptop
-  #         ./modules/nixos/fonts.nix
-  #         {
-  #           environment.systemPackages = [alejandra.defaultPackage.x86_64-linux];
-  #         }
-  #         home-manager.nixosModules.home-manager
-  #         {
-  #           home-manager.useGlobalPkgs = true;
-  #           home-manager.useUserPackages = true;
-  #           home-manager.users.luke = import ./home-manager;
-  #         }
-  #       ];
-  #     };
-  #   };
-  # };
 }
