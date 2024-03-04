@@ -110,7 +110,6 @@
     nixosConfigurations = {
       laptop = sharedConfig "laptop" "x86_64-linux";
       desktop = sharedConfig "desktop" "x86_64-linux";
-      formatter = system: nixpkgs.legacyPackages.${system}.alejandra;
     };
   };
 }
