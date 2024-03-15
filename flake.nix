@@ -70,10 +70,6 @@
           ./modules/nixos/common.nix
           ./hosts/${hostname}
 
-          # ./base
-          # ./${hostname}.nix
-          # ./hardware/${hostname}.nix
-
           {networking.hostName = hostname;}
 
           home-manager.nixosModules.home-manager

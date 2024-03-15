@@ -58,7 +58,6 @@
 
       -- This is where you actually apply your config choices
       config.font = wezterm.font_with_fallback {
-        "JetBrainsMono Nerd Font",
         "FiraCode Nerd Font",
 
         -- To avoid 'Chinese characters displayed as variant (Japanese) glyphs'

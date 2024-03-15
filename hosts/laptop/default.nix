@@ -9,7 +9,7 @@
   imports = [
     # ../../modules/system.nix
     # ../../modules/i3.nix
-
+    ../../pkgs/coding.nix
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
   ];
@@ -18,12 +18,12 @@
     fsType = "nfs";
     options = ["x-systemd.automount" "noauto"];
   };
-
+  services.tailscale.enable = true;
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.configurationLimit = 10;
-  networking.hostName = "laptop"; # Define your hostname.
+  # networking.hostName = "laptop"; # Define your hostname.
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
