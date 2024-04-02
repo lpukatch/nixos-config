@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs = {
-      url = "github:nixos/nixpkgs/nixos-23.11";
+      url = "github:nixos/nixpkgs/nixos-unstable";
     };
 
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -68,6 +68,7 @@
 
         modules = [
           ./modules/nixos/common.nix
+          ./pkgs/steam.nix
           ./hosts/${hostname}
 
           {networking.hostName = hostname;}

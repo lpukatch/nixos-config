@@ -6,6 +6,10 @@
   alejandra,
   ...
 }: {
+  imports = [
+    ./system/packages.nix
+  ];
+
   networking.networkmanager.enable = true;
 
   # Set your time zone.
@@ -62,7 +66,9 @@
   environment.systemPackages =
     (with pkgs; [
       #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-      #  wget
+      wget
+      gimp
+      git
       vscode
       git
       nix-output-monitor
@@ -82,13 +88,13 @@
       gnome-photos
       gnome-tour
       gnome-connections
+      gedit # text editor
     ])
     ++ (with pkgs.gnome; [
       cheese # webcam tool
       gnome-music
       gnome-terminal
       simple-scan # document scanner
-      gedit # text editor
       epiphany # web browser
       geary # email reader
       evince # document viewer
@@ -113,6 +119,7 @@
   # Enable sound with pipewire.
   sound.enable = true;
   hardware.pulseaudio.enable = false;
+
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
