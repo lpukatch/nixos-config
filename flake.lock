@@ -228,7 +228,7 @@
         "fenix": "fenix_2",
         "flake-compat": "flake-compat",
         "flake-schemas": "flake-schemas",
-        "flake-utils": "flake-utils",I wish 
+        "flake-utils": "flake-utils",
         "nix-filter": "nix-filter",
         "nixpkgs": "nixpkgs",
         "systems": "systems",

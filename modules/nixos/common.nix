@@ -7,7 +7,7 @@
   ...
 }: {
   imports = [
-    ./system/packages.nix
+    ../../system/packages.nix
   ];
 
   networking.networkmanager.enable = true;
