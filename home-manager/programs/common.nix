@@ -33,6 +33,7 @@
     nodePackages.pnpm
     yarn
     cura
+    moonlight-qt
     # # db related
     # dbeaver
     # mycli
@@ -63,7 +64,10 @@
       ];
     };
   };
-
+  dconf = {
+    enable = true;
+    settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+  };
   services = {
     syncthing.enable = true;
 

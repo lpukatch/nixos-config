@@ -18,6 +18,11 @@
     fsType = "nfs";
     options = ["x-systemd.automount" "noauto"];
   };
+  fileSystems."/mnt/config" = {
+    device = "10.1.1.230:/mnt/user/config";
+    fsType = "nfs";
+    options = ["x-systemd.automount" "noauto"];
+  };
   services.tailscale.enable = true;
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -32,7 +37,6 @@
   #   enable = true;
   #   enableSSHSupport = true;
   # };
-
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.

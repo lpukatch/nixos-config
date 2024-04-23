@@ -13,10 +13,7 @@
     #   ./rofi
     #   ./shell
   ];
-  dconf = {
-    enable = true;
-    settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
-  };
+
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home = {

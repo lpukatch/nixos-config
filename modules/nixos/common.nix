@@ -80,33 +80,38 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
+  # services.xserver.displayManager.sddm.enable = true;
+  services.xserver.displayManager.sddm.wayland.enable = true;
+  # services.xserver.desktopManager.plasma5.enable = true;
+  # KDE Plasma 6 is now available on unstable
+  services.desktopManager.plasma6.enable = true;
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-  environment.gnome.excludePackages =
-    (with pkgs; [
-      gnome-photos
-      gnome-tour
-      gnome-connections
-      gedit # text editor
-    ])
-    ++ (with pkgs.gnome; [
-      cheese # webcam tool
-      gnome-music
-      gnome-terminal
-      simple-scan # document scanner
-      epiphany # web browser
-      geary # email reader
-      evince # document viewer
-      gnome-characters
-      gnome-contacts
-      gnome-calendar
-      totem # video player
-      tali # poker game
-      iagno # go game
-      hitori # sudoku game
-      atomix # puzzle game
-    ]);
+  # services.xserver.displayManager.gdm.enable = true;
+  # services.xserver.desktopManager.gnome.enable = true;
+  # environment.gnome.excludePackages =
+  #   (with pkgs; [
+  #     gnome-photos
+  #     gnome-tour
+  #     gnome-connections
+  #     gedit # text editor
+  #   ])
+  #   ++ (with pkgs.gnome; [
+  #     cheese # webcam tool
+  #     gnome-music
+  #     gnome-terminal
+  #     simple-scan # document scanner
+  #     epiphany # web browser
+  #     geary # email reader
+  #     evince # document viewer
+  #     gnome-characters
+  #     gnome-contacts
+  #     gnome-calendar
+  #     totem # video player
+  #     tali # poker game
+  #     iagno # go game
+  #     hitori # sudoku game
+  #     atomix # puzzle game
+  #   ]);
   # Configure keymap in X11
   services.xserver = {
     xkb = {
