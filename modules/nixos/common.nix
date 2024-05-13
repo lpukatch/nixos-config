@@ -45,10 +45,10 @@
   # Experimental
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
-  # system.autoUpgrade = { Might be breaking shitl
-  #   enable = true;
-  #   channel = "https://nixos.org/channels/unstable";
-  # };
+  system.autoUpgrade = {
+    enable = true;
+    channel = "https://nixos.org/channels/unstable";
+  };
 
   fonts = {
     packages = with pkgs; [
@@ -65,7 +65,6 @@
   };
   environment.systemPackages =
     (with pkgs; [
-      #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
       wget
       gimp
       git
@@ -77,41 +76,20 @@
   programs.zsh = {
     enable = true;
   }; # Bootloader.
-
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep-since 4d --keep 3";
+    flake = "/home/luke/nixos-config";
+  };
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   # services.xserver.displayManager.sddm.enable = true;
-  services.xserver.displayManager.sddm.wayland.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
   # services.xserver.desktopManager.plasma5.enable = true;
   # KDE Plasma 6 is now available on unstable
   services.desktopManager.plasma6.enable = true;
-  # Enable the GNOME Desktop Environment.
-  # services.xserver.displayManager.gdm.enable = true;
-  # services.xserver.desktopManager.gnome.enable = true;
-  # environment.gnome.excludePackages =
-  #   (with pkgs; [
-  #     gnome-photos
-  #     gnome-tour
-  #     gnome-connections
-  #     gedit # text editor
-  #   ])
-  #   ++ (with pkgs.gnome; [
-  #     cheese # webcam tool
-  #     gnome-music
-  #     gnome-terminal
-  #     simple-scan # document scanner
-  #     epiphany # web browser
-  #     geary # email reader
-  #     evince # document viewer
-  #     gnome-characters
-  #     gnome-contacts
-  #     gnome-calendar
-  #     totem # video player
-  #     tali # poker game
-  #     iagno # go game
-  #     hitori # sudoku game
-  #     atomix # puzzle game
-  #   ]);
+
   # Configure keymap in X11
   services.xserver = {
     xkb = {
@@ -141,12 +119,12 @@
     #media-session.enable = true;
   };
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    persistent = true;
-    options = "--delete-older-than 7d";
-  };
+  # nix.gc = {
+  #   automatic = true;
+  #   dates = "weekly";
+  #   persistent = true;
+  #   options = "--delete-older-than 7d";
+  # };
   nix.settings.auto-optimise-store = true;
 
   system.stateVersion = "23.11";

@@ -25,10 +25,7 @@
     # package = pkgs.wezterm.override { };
 
     extraConfig = let
-      fontsize =
-        if pkgs.stdenv.isDarwin
-        then "14.0"
-        else "13.0";
+      fontsize = "13.0";
     in ''
       -- Pull in the wezterm API
       local wezterm = require 'wezterm'
@@ -68,7 +65,7 @@
       config.hide_tab_bar_if_only_one_tab = true
       config.scrollback_lines = 10000
       config.enable_scroll_bar = true
-      config.term = 'wezterm'
+      config.term = 'xterm'
 
       config.keys = {
         -- toggle opacity(CTRL + SHIFT + B)

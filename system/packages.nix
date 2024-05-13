@@ -25,6 +25,5 @@
     material-icons
     brightnessctl
     networkmanagerapplet
-    nh
   ];
 }
