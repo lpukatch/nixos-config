@@ -10,7 +10,16 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
   ];
-
+  fileSystems."/mnt/data" = {
+    device = "10.1.1.230:/mnt/user/data";
+    fsType = "nfs";
+    options = ["x-systemd.automount" "noauto"];
+  };
+  fileSystems."/mnt/config" = {
+    device = "10.1.1.230:/mnt/user/config";
+    fsType = "nfs";
+    options = ["x-systemd.automount" "noauto"];
+  };
   # Bootloader.
   #boot.loader.systemd-boot.enable = true;
   boot.loader = {
