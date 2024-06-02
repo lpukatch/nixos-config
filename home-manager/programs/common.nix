@@ -1,12 +1,14 @@
 {
   lib,
   pkgs,
+  config,
   ...
 }: {
   home.packages = with pkgs; [
     zip
     unzip
     beeper
+    ripgrep
     # utils
     # ripgrep
     # yq-go # https://github.com/mikefarah/yq
@@ -62,6 +64,14 @@
         "--preview 'exa --icons --git --color always -T -L 3 {} | head -200'"
         "--exact"
       ];
+    };
+  };
+  # home.folder."Configs/nixos-config".source = config.lib.folder.mkOutOfStoreSymlink "/etc/nixos";
+  gtk = {
+    enable = true;
+    theme = {
+      name = "Breeze-Dark";
+      package = pkgs.libsForQt5.breeze-gtk;
     };
   };
   dconf = {

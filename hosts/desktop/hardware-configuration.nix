@@ -8,26 +8,64 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/832020cd-15b9-499e-a713-943ffa2b8409";
-      fsType = "btrfs";
-      options = [ "subvol=@" ];
+    { device = "none";
+      fsType = "tmpfs";
+          options = ["defaults" "size=32G" "mode=755"];
+
     };
 
-  boot.initrd.luks.devices."crypted".device = "/dev/disk/by-uuid/ac2c8268-0150-4d6a-a06e-b8319741d876";
+  fileSystems."/persist" =
+    { device = "/dev/disk/by-uuid/7fc6cfa6-3973-4cc0-90b8-8707380eeef9";
+      fsType = "btrfs";
+      options = [ "subvol=persist" "compress=zstd" "noatime" ];
+          neededForBoot = true;
+
+    };
+
+  boot.initrd.luks.devices."crypted".device = "/dev/disk/by-uuid/b50996af-daf0-49ab-a5df-027a94c166fc";
+
+  fileSystems."/nix" =
+    { device = "/dev/disk/by-uuid/7fc6cfa6-3973-4cc0-90b8-8707380eeef9";
+      fsType = "btrfs";
+      options = [ "subvol=nix" "compress=zstd" "noatime" ];
+    };
+
+
+  fileSystems."/var/log" =
+    { device = "/dev/disk/by-uuid/7fc6cfa6-3973-4cc0-90b8-8707380eeef9";
+      fsType = "btrfs";
+      options = [ "subvol=log" "compress=zstd" "noatime" ];    
+      neededForBoot = true;
+
+    };
+
+  fileSystems."/swap" =
+    { device = "/dev/disk/by-uuid/7fc6cfa6-3973-4cc0-90b8-8707380eeef9";
+      fsType = "btrfs";
+      options = [ "subvol=swap"  "noatime" ];
+    };
+
+  fileSystems."/tmp" =
+    { device = "/dev/disk/by-uuid/7fc6cfa6-3973-4cc0-90b8-8707380eeef9";
+      fsType = "btrfs";
+      options = [ "subvol=tmp" "noatime" ];
+    };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/DE6D-5F30";
+    { device = "/dev/disk/by-uuid/9088-13C3";
       fsType = "vfat";
+      options = [ "fmask=0077" "dmask=0077" ];
     };
 
-  swapDevices = [ ];
 
+  boot.tmp.cleanOnBoot = true;
+  swapDevices = [{device = "/swap/swapfile";}];
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction

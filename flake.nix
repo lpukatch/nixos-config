@@ -51,20 +51,28 @@
       url = "github:kamadorueda/alejandra/3.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
+    nur.url = "github:nix-community/NUR";
   };
 
   outputs = {
     self,
     nixpkgs,
     home-manager,
+    nixpkgs-unstable,
+    nixpkgs-stable,
     nix-colors,
+    impermanence,
+    nix-vscode-extensions,
+    nur,
     alejandra,
     ...
-  } @ attrs: let
+  } @ inputs: let
+    inherit (self) outputs;
     sharedConfig = hostname: nsystem:
       nixpkgs.lib.nixosSystem {
         system = nsystem;
-        specialArgs = attrs;
+        specialArgs = inputs;
 
         modules = [
           ./modules/nixos/common.nix
@@ -72,11 +80,15 @@
           ./hosts/${hostname}
 
           {networking.hostName = hostname;}
+          impermanence.nixosModules.impermanence
 
           home-manager.nixosModules.home-manager
           {
-            home-manager.useGlobalPkgs = true;
+            # home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = {inherit inputs outputs;};
+            home-manager.backupFileExtension = "bak";
+
             home-manager.users.luke = import ./home-manager;
           }
           # impermanence.nixosModule
@@ -86,21 +98,23 @@
           #stylix.nixosModules.stylix
           # chaotic.nixosModules.default
 
-          # { nixpkgs.overlays = [
-          #   (final: prev: {
-          #     unstable = import nixpkgs-unstable {
-          #       system = nsystem;
-          #       config.allowUnfree = true;
-          #     };
-          #   })
+          {
+            nixpkgs.overlays = [
+              (final: prev: {
+                unstable = import nixpkgs-unstable {
+                  system = nsystem;
+                  config.allowUnfree = true;
+                };
+              })
 
-          #   (final: prev: {
-          #     stable = import nixpkgs-stable {
-          #       system = nsystem;
-          #       config.allowUnfree = true;
-          #     };
-          #   })
-          # ];}
+              (final: prev: {
+                stable = import nixpkgs-stable {
+                  system = nsystem;
+                  config.allowUnfree = true;
+                };
+              })
+            ];
+          }
         ];
       };
   in {

@@ -9,10 +9,18 @@
   imports = [
     # ../../modules/system.nix
     # ../../modules/i3.nix
-    ../../pkgs/coding.nix
+    # ../../pkgs/coding.nix
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
   ];
+    users.users.luke = {
+    isNormalUser = true;
+    description = "luke";
+    extraGroups = ["networkmanager" "wheel"];
+    packages = with pkgs; [
+      #  thunderbird
+    ];
+  };
   fileSystems."/mnt/data" = {
     device = "10.1.1.230:/mnt/user/data";
     fsType = "nfs";

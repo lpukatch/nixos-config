@@ -16,14 +16,6 @@
   # Set your time zone.
   time.timeZone = "America/New_York";
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.luke = {
-    isNormalUser = true;
-    description = "luke";
-    extraGroups = ["networkmanager" "wheel"];
-    packages = with pkgs; [
-      #  thunderbird
-    ];
-  };
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -69,23 +61,14 @@
       wget
       gimp
       git
-      vscode
       git
       nix-output-monitor
     ])
     ++ [alejandra.defaultPackage.x86_64-linux];
-  programs.zsh = {
-    enable = true;
-  }; # Bootloader.
-  programs.nh = {
-    enable = true;
-    clean.enable = true;
-    clean.extraArgs = "--keep-since 4d --keep 3";
-    flake = "/home/luke/nixos-config";
-  };
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
-  # services.xserver.displayManager.sddm.enable = true;
+  services.displayManager.sddm.enable = true;
   services.displayManager.sddm.wayland.enable = true;
   # services.xserver.desktopManager.plasma5.enable = true;
   # KDE Plasma 6 is now available on unstable
@@ -120,12 +103,12 @@
     #media-session.enable = true;
   };
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  # nix.gc = {
-  #   automatic = true;
-  #   dates = "weekly";
-  #   persistent = true;
-  #   options = "--delete-older-than 7d";
-  # };
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    persistent = true;
+    options = "--delete-older-than 7d";
+  };
   nix.settings.auto-optimise-store = true;
 
   system.stateVersion = "23.11";
